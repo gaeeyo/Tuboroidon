@@ -5,13 +5,10 @@ import info.narazaki.android.lib.dialog.SimpleDialog;
 import info.narazaki.android.lib.system.MigrationSDK5;
 import info.narazaki.android.lib.toast.ManagedToast;
 import info.narazaki.android.lib.view.SimpleSpanTextViewOnTouchListener;
-import info.narazaki.android.tuboroid.FlickDetector;
 import info.narazaki.android.tuboroid.R;
 import info.narazaki.android.tuboroid.TuboroidApplication;
 import info.narazaki.android.tuboroid.TuboroidApplication.ViewConfig;
 import info.narazaki.android.tuboroid.activity.base.SearchableListActivity;
-import info.narazaki.android.tuboroid.activity.base.TuboroidActivity;
-import info.narazaki.android.tuboroid.activity.base.TuboroidExpandableListActivityBase;
 import info.narazaki.android.tuboroid.adapter.ThreadEntryListAdapter;
 import info.narazaki.android.tuboroid.agent.ThreadEntryListAgent;
 import info.narazaki.android.tuboroid.agent.FavoriteCacheListAgent.NextFavoriteThreadFetchedCallback;
@@ -32,7 +29,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jp.syoboi.android.ListViewEx;
-import jp.syoboi.android.ListViewScrollButton;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -55,7 +51,6 @@ import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -70,7 +65,6 @@ import android.view.View.OnTouchListener;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -79,7 +73,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView.BufferType;
 
 public class ThreadEntryListActivity extends SearchableListActivity {
@@ -280,17 +273,6 @@ public class ThreadEntryListActivity extends SearchableListActivity {
 		//getListView().setDivider(new ColorDrawable(ta.getColor(0, 0x40888888)));
 		getListView().setDivider(new ColorDrawable(0x80606060));
 
-        ListViewScrollButton btn = (ListViewScrollButton)findViewById(R.id.button_scroll);
-        if (btn != null) {
-        	btn.setListView(getListView());
-        	btn.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					scrollDown(0);
-				}
-			});
-        }
-        
         // スクロールキー
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         use_scroll_key_ = pref.getBoolean("pref_use_page_up_down_key", true);
@@ -1021,36 +1003,7 @@ public class ThreadEntryListActivity extends SearchableListActivity {
     	lv.setDividerHeight(view_config.entry_divider > 0 ? 
     			res.getDimensionPixelSize(R.dimen.entryDividerHeight) : 0);
 
-    	ListViewScrollButton sb = (ListViewScrollButton)findViewById(R.id.button_scroll);
-    	if (sb != null) {
-    		FrameLayout.LayoutParams lp = (LayoutParams) sb.getLayoutParams();
-    		lp.bottomMargin = res.getDimensionPixelSize(R.dimen.scrollButtonMargin);
-    		lp.leftMargin = lp.rightMargin = lp.bottomMargin;
-    		boolean visibility = true;
-    		boolean reverse = true;
-    		switch (view_config.scroll_button_position) {
-    		case ViewConfig.SCROLL_BUTTON_CENTER:
-        		lp.bottomMargin = res.getDimensionPixelSize(R.dimen.scrollButtonBottomMargin);
-        		lp.gravity = Gravity.CENTER | Gravity.BOTTOM;
-        		reverse = false;
-        		break;
-    		case ViewConfig.SCROLL_BUTTON_BOTTOM:
-        		lp.gravity = Gravity.CENTER | Gravity.BOTTOM;
-    			break;
-    		case ViewConfig.SCROLL_BUTTON_LB:
-    			lp.gravity = Gravity.LEFT | Gravity.BOTTOM;
-    			break;
-    		case ViewConfig.SCROLL_BUTTON_RB:
-    			lp.gravity = Gravity.RIGHT | Gravity.BOTTOM;
-    			break;
-    		case ViewConfig.SCROLL_BUTTON_NONE:
-    			visibility = false;
-    			break;
-    		}
-    		sb.setReverse(reverse);
-    		sb.setLayoutParams(lp);
-    		sb.setVisibility(visibility ? View.VISIBLE : View.GONE);
-    	}
+    	setScrollButtonPosition(btnListScroll, view_config.scroll_button_position);
     }
     
     // ////////////////////////////////////////////////////////////
