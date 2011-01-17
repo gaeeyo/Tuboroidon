@@ -93,6 +93,7 @@
 	<string name="label_menu_manual_order">手動整理</string>
 	<string name="label_menu_auto_order">自動整理</string>
 	<string name="label_menu_clear_cache">キャッシュ削除</string>
+	<string name="label_menu_share_board">共有</string>
 
 	<string name="label_submenu_delete_filled">埋まったスレを削除</string>
 	<string name="label_submenu_auto_sort">自動で並べなおす</string>

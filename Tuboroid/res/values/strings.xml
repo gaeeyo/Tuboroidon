@@ -101,6 +101,7 @@
 	<string name="label_menu_manual_order">manage order</string>
 	<string name="label_menu_auto_order">auto order</string>
 	<string name="label_menu_clear_cache">clear cache</string>
+	<string name="label_menu_share_board">share</string>
 
 	<string name="label_submenu_delete_filled">delete filled</string>
 	<string name="label_submenu_auto_sort">auto sort</string>
