@@ -66,6 +66,7 @@
 	<string name="ctx_submenu_copy_to_clipboard_id">ID</string>
 	<string name="ctx_submenu_copy_to_clipboard_name">Name</string>
 	<string name="ctx_submenu_copy_to_clipboard_body">entry body</string>
+	<string name="ctx_submenu_copy_to_clipboard_whole_entry">whole entry</string>
 
 	<string name="ctx_menu_title_board">operation for this board</string>
 	<string name="ctx_menu_delete_board">delete</string>
@@ -134,6 +135,7 @@
 	<string name="btn_label_entry_edit_submit">Submit</string>
 	<string name="btn_label_entry_edit_aa">AA View</string>
 	<string name="dialog_aa_font_install">Install</string>
+	<string name="btn_label_copy_all">Copy All</string>
 
 	<!-- トースト -->
 	<string name="toast_reload_board_list_failed">failed to load board list</string>

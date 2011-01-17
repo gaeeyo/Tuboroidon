@@ -58,6 +58,7 @@
 	<string name="ctx_submenu_copy_to_clipboard_id">ID</string>
 	<string name="ctx_submenu_copy_to_clipboard_name">名前</string>
 	<string name="ctx_submenu_copy_to_clipboard_body">書き込み本文</string>
+	<string name="ctx_submenu_copy_to_clipboard_whole_entry">レス全体</string>
 
 	<string name="ctx_menu_title_board">この板に対して</string>
 	<string name="ctx_menu_delete_board">削除する</string>
@@ -126,6 +127,7 @@
 	<string name="btn_label_entry_edit_submit">書き込む</string>
 	<string name="btn_label_entry_edit_aa">AA表示</string>
 	<string name="dialog_aa_font_install">インストール</string>
+	<string name="btn_label_copy_all">全てコピー</string>
 
 	<!-- トースト -->
 	<string name="toast_reload_board_list_failed">板リストの取得中に通信エラーが発生しました</string>
