@@ -184,7 +184,7 @@ abstract public class FavoriteListBaseActivity extends TuboroidListActivity {
     protected void createToolbarButtons() {
         super.createToolbarButtons();
         updateToolbarButtonUpdateOnly();
-    }
+    } 
     
     protected void updateToolbarButtonUpdateOnly() {
         ImageButton button_updated_only = (ImageButton) findViewById(R.id.button_tab_updated_only);
