@@ -225,6 +225,16 @@
 	<string name="dialog_thread_list_moved_summary">Failed to load thread list(hmm...board was moved?)
 	</string>
 
+	<!-- 設定ダイアログ -->
+	<string name="dialog_thread_entry_config_title">表示設定</string>
+	<string name="dialog_thread_entry_config_body">本文の大きさ</string>
+	<string name="dialog_thread_entry_config_header">ヘッダーの大きさ</string>
+	<string name="dialog_thread_entry_config_aa">AAの大きさ</string>
+	<string name="dialog_thread_entry_config_size_format">%d px</string>
+	<string name="dialog_thread_entry_config_show_scroll_button">スクロールボタン</string>
+	<string name="dialog_thread_entry_config_aa_mode">AAモード</string>
+	<string name="dialog_thread_entry_config_divider">レス間の区切り</string>
+
 	<!-- 設定画面 -->
 
 	<string name="pref_cat_title_screen_setting">Screen</string>

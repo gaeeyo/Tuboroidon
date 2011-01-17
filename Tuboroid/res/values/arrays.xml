@@ -210,5 +210,12 @@
 		<item>4</item>
 	</integer-array>
 
-
+	<array name="scroll_button_position">
+		<item>None</item>
+		<item>Bottom</item>
+		<item>Slight above</item>
+		<item>Left bottom</item>
+		<item>Right bottom</item>
+	</array>
+	
 </resources>
