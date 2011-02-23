@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -25,7 +27,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
-import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.HttpEntityWrapper;
@@ -33,7 +34,6 @@ import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreConnectionPNames;
-import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import info.narazaki.android.lib.agent.http.task.HttpTaskBase;
@@ -57,10 +57,11 @@ public class HttpTaskAgent implements HttpTaskAgentInterface {
         public void saveCookieStore(final String cookie_bare_data);
     }
     
+    private static HashMap<String, SSLSocketFactory> ssl_socket_factory_map_ = new HashMap<String, SSLSocketFactory>();
+    
     protected Context context_;
     private final ExecutorService executor_;
     
-    private HttpContext http_context_;
     private AbstractHttpClient http_client_;
     private BasicCookieStore cookie_store_;
     
@@ -73,10 +74,8 @@ public class HttpTaskAgent implements HttpTaskAgentInterface {
         context_ = context;
         executor_ = Executors.newSingleThreadExecutor();
         
-        http_client_ = createHttpClient(user_agent);
         cookie_store_ = createCookieStore();
-        
-        http_context_ = createContext(cookie_store_);
+        http_client_ = createHttpClient(user_agent);
         
         save_cookie_callback_ = null;
         timeout_ms_ = 10000; // 10秒
@@ -108,6 +107,7 @@ public class HttpTaskAgent implements HttpTaskAgentInterface {
     protected AbstractHttpClient createHttpClient(final String user_agent) {
         AbstractHttpClient http_client = new DefaultHttpClient();
         http_client.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
+        http_client.setCookieStore(cookie_store_);
         http_client.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, getTimeoutMS());
         http_client.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, getTimeoutMS());
         
@@ -142,7 +142,7 @@ public class HttpTaskAgent implements HttpTaskAgentInterface {
             }
         });
         
-        SSLSocketFactory ssl_socket_factory = createSSLSocketFactory();
+        SSLSocketFactory ssl_socket_factory = this.getSSLSocketFactory();
         if (ssl_socket_factory != null) {
             Scheme https_scheme = new Scheme("https", ssl_socket_factory, 443);
             http_client.getConnectionManager().getSchemeRegistry().register(https_scheme);
@@ -151,7 +151,25 @@ public class HttpTaskAgent implements HttpTaskAgentInterface {
         return http_client;
     }
     
-    protected SSLSocketFactory createSSLSocketFactory() {
+    private SSLSocketFactory getSSLSocketFactory() {
+        try {
+            Method method = getClass().getMethod("createSSLSocketFactory", new Class[] {});
+            String name = method.getDeclaringClass().getName();
+            synchronized (ssl_socket_factory_map_) {
+                SSLSocketFactory factory = ssl_socket_factory_map_.get(name);
+                if (factory != null) return factory;
+                factory = createSSLSocketFactory();
+                ssl_socket_factory_map_.put(name, factory);
+                return factory;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+    }
+    
+    public SSLSocketFactory createSSLSocketFactory() {
         try {
             String keystore_filename = System.getProperty("javax.net.ssl.trustStore");
             String keystore_password = System.getProperty("javax.net.ssl.trustStorePassword");
@@ -226,7 +244,7 @@ public class HttpTaskAgent implements HttpTaskAgentInterface {
             cookie_store_.clear();
             e.printStackTrace();
         }
-        http_context_.setAttribute(ClientContext.COOKIE_STORE, cookie_store_);
+        http_client_.setCookieStore(cookie_store_);
     }
     
     @Override
@@ -264,12 +282,6 @@ public class HttpTaskAgent implements HttpTaskAgentInterface {
     protected BasicCookieStore createCookieStore() {
         ExternalizableCookieStore cookie_store = new ExternalizableCookieStore();
         return cookie_store;
-    }
-    
-    protected HttpContext createContext(BasicCookieStore cookie_store) {
-        HttpContext http_context = new BasicHttpContext();
-        http_context.setAttribute(ClientContext.COOKIE_STORE, cookie_store);
-        return http_context;
     }
     
     static class GzipDecompressingEntity extends HttpEntityWrapper {
