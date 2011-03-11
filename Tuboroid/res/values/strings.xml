@@ -153,6 +153,7 @@
 	<string name="toast_post_succeeded">post succeeded</string>
 
 	<string name="toast_clear_ignores">Ignore IDs/words cleared</string>
+	<string name="toast_clear_cookies">Cookies cleard</string>
 
 	<string name="toast_check_unread_favorite_threads">Check unread favorite threads</string>
 
@@ -197,6 +198,9 @@
 	<string name="dialog_text_delete_filled_threads">delete filled threads</string>
 	<string name="dialog_text_delete_threads_except_favorite">delete threads except favorite</string>
 	<string name="dialog_text_delete_checked_threads">delete checked threads</string>
+
+	<string name="dialog_clear_cookies">Are you sure you want to clear cookies?</string>
+	<string name="dialog_clear_cookies_title">Clear Cookie</string>
 
 	<string name="dialog_dat_dropped_title">Dropped thread</string>
 	<string name="dialog_dat_dropped_summary">find similar thread?</string>
@@ -355,6 +359,8 @@
 	<string name="pref_cat_title_other">Other Settings</string>
 	<string name="pref_title_clear_ignores">Clear Ignore IDs/words</string>
 	<string name="pref_summary_clear_ignores">Clear ignore IDs/words</string>
+	<string name="pref_title_clear_cookies">Clear cookies</string>
+	<string name="pref_summary_clear_cookies">Clear cookies</string>
 
 	<string name="pref_title_skip_agreement_notice">Skip agreement notice</string>
 	<string name="pref_summary_skip_agreement_notice">Skip agreement notice on post</string>

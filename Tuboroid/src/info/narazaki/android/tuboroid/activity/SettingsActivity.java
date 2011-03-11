@@ -2,6 +2,7 @@ package info.narazaki.android.tuboroid.activity;
 
 import info.narazaki.android.lib.activity.PickFileActivityBase;
 import info.narazaki.android.lib.activity.base.NPreferenceActivity;
+import info.narazaki.android.lib.dialog.SimpleDialog;
 import info.narazaki.android.lib.system.MigrationSDK4;
 import info.narazaki.android.lib.system.MigrationSDK5;
 import info.narazaki.android.lib.toast.ManagedToast;
@@ -11,6 +12,7 @@ import info.narazaki.android.tuboroid.agent.TuboroidAgent;
 
 import java.io.File;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -75,6 +77,17 @@ public class SettingsActivity extends NPreferenceActivity {
                 return true;
             }
         });
+        
+        // クッキーのクリア
+        Preference manage_clear_cookies= findPreference("manage_clear_cookies");
+        manage_clear_cookies.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        	@Override
+        	public boolean onPreferenceClick(Preference preference) {
+        		onClearCookiesPrefClicked();
+        		return true;
+        	}
+        });
+                
         
         Preference pref_external_aa_font = findPreference("pref_external_aa_font");
         if (MigrationSDK4.supported()) {
@@ -154,5 +167,18 @@ public class SettingsActivity extends NPreferenceActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    
+
+    private void onClearCookiesPrefClicked() {
+        SimpleDialog.showYesNo(SettingsActivity.this, R.string.dialog_clear_cookies_title,
+                R.string.dialog_clear_cookies, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getAgent().clearCookie();
+                        ManagedToast.raiseToast(SettingsActivity.this, R.string.toast_clear_cookies);
+                    }
+                }, new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {}
+                });
+    }
 }
